@@ -10,7 +10,7 @@ export default function Map() {
 
         const map = new maplibregl.Map({
             container: mapContainerRef.current,
-            style: `https://api.maptiler.com/maps/dataviz-dark/style.json?key=${import.meta.env.VITE_PUBLIC_TOKEN_MAP}`,
+            style: `https://api.maptiler.com/maps/satellite/style.json?key=${import.meta.env.VITE_PUBLIC_TOKEN_MAP}`,
             center: [110.37833662342864, -7.940883389023307],
             zoom: 13,
             attributionControl: false,
@@ -37,8 +37,8 @@ export default function Map() {
         };
     }, []);
     return (
-        <div className="w-full h-screen flex justify-center items-center xl:px-32 xl:py-48 md:p-16 p-10">
-            <div className="w-full h-[100vw] md:h-[70vw] xl:h-[40vw] rounded-md">
+        <div className="w-full h-full flex justify-center items-center">
+            <div className="w-full h-full rounded-md">
                 <div
                     ref={mapContainerRef}
                     style={{
