@@ -1,8 +1,14 @@
 import grids from "../assets/data/info-grid.json";
 import allDataRaw from "../assets/data/all-data.json";
 import splitedData from "../assets/data/splited-data.json";
+import pairingStatisticalData from "../assets/data/pairingdata.json";
 
-import type { MetaDataInterface, GridMeta } from "../assets/data/data-types";
+import type {
+  MetaDataInterface,
+  GridMeta,
+  PairingDataRAWInterface,
+  PairingStationData,
+} from "../assets/data/data-types";
 
 const allData: MetaDataInterface[] = allDataRaw as MetaDataInterface[];
 
@@ -64,7 +70,11 @@ export function getAreaId(lat: number, lon: number): string | null {
   return `Area_${areaId}`;
 }
 
-export function getNeighborAreas(lat: number, lon: number, radius = 1): string[] {
+export function getNeighborAreas(
+  lat: number,
+  lon: number,
+  radius = 1,
+): string[] {
   const { row, col } = getCellIndex(lat, lon);
 
   const result: string[] = [];
@@ -137,4 +147,19 @@ export function searchNearest(
   withDistance.sort((a, b) => a.distance - b.distance);
 
   return withDistance.slice(0, limit);
+}
+
+const pairingStatisticalRawData: PairingDataRAWInterface =
+  pairingStatisticalData as PairingDataRAWInterface;
+
+export const constantPairingStatisticalRawYearData =
+  pairingStatisticalRawData.year;
+
+export const constantPairingStatisticalRawContentData =
+  pairingStatisticalRawData.content;
+
+export function getPairingStatisticalDataByID(
+  id: string,
+): PairingStationData | null {
+  return constantPairingStatisticalRawContentData[id] || null;
 }

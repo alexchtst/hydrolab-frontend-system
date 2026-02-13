@@ -4,10 +4,12 @@ import Map from "../components/contain-detail/map";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../components/dialog";
 import React from "react";
 import { DataContext } from "../context-provider/data-context";
+import { constantPairingStatisticalRawYearData } from "../lib/dataService";
 
 export default function ContentDetailDataScreen() {
-  const { tempMainData } = React.useContext(DataContext)
-  console.log(tempMainData);
+  const { tempMainData, tempDetailData } = React.useContext(DataContext)
+
+  console.log(tempMainData, constantPairingStatisticalRawYearData, tempDetailData)
 
   return (
     <div className="space-y-12 bg-blue-50">
@@ -56,11 +58,11 @@ export default function ContentDetailDataScreen() {
               <DialogTrigger asChild>
                 <button><Scan className="cursor-pointer" /></button>
               </DialogTrigger>
-              <DialogContent className="max-w-[90%]">
+              <DialogContent className="md:max-w-[80%] max-w-[90%] min-h-125 md:p-8">
                 <DialogHeader>
-                  <DialogTitle>Detail Daerah Terdekat</DialogTitle>
+                  <DialogTitle>Detail Lokasi Stasiun</DialogTitle>
                   <DialogDescription>
-                    Daerah Terdekat dari titik 10.32, 109.0021
+                    Letak {tempMainData?.Station_Name} berada di {tempMainData?.LAT}, {tempMainData?.LON}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center">

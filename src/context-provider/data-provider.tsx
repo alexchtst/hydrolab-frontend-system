@@ -1,6 +1,6 @@
 import React from "react";
-import { DataContext, STORAGE_KEY_MAIN_DATA } from "./data-context";
-import type { DataInterface } from "../types/data-store-type";
+import { DataContext, STORAGE_KEY_CONTENT_DATA, STORAGE_KEY_MAIN_DATA } from "./data-context";
+import type { DataContentInterface, DataInterface } from "../types/data-store-type";
 
 export default function DataContextProvider({ children }: { children: React.ReactNode }) {
     const [pagNum, setPagNum] = React.useState(0);
@@ -8,6 +8,16 @@ export default function DataContextProvider({ children }: { children: React.Reac
     const [selectedData, setSelectedData] = React.useState<DataInterface | null>(() => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY_MAIN_DATA);
+            return stored ? JSON.parse(stored) : null;
+        } catch (error) {
+            console.error('Error loading from localStorage:', error);
+            return null;
+        }
+    });
+
+    const [statisticData, setStatisticData] = React.useState<DataContentInterface | null>(() => {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY_CONTENT_DATA);
             return stored ? JSON.parse(stored) : null;
         } catch (error) {
             console.error('Error loading from localStorage:', error);
@@ -28,6 +38,20 @@ export default function DataContextProvider({ children }: { children: React.Reac
         }
     }, []);
 
+
+    const setTempDetailData = React.useCallback((data: DataContentInterface | null) => {
+        setStatisticData(data);
+        try {
+            if (data === null) {
+                localStorage.removeItem(STORAGE_KEY_CONTENT_DATA);
+            } else {
+                localStorage.setItem(STORAGE_KEY_CONTENT_DATA, JSON.stringify(data));
+            }
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }, []);
+
     return (
         <DataContext.Provider value={{
             fetchedMainData: null,
@@ -36,9 +60,9 @@ export default function DataContextProvider({ children }: { children: React.Reac
             setFetchedDetailData: () => { },
 
             tempMainData: selectedData,
-            tempDetailData: null,
+            tempDetailData: statisticData,
             setTempMainData: setTempMainData,
-            setTempDetailData: () => { },
+            setTempDetailData: setTempDetailData,
 
             pagNum: pagNum,
             setPagNum: setPagNum,

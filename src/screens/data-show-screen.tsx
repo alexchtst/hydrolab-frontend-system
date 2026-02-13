@@ -10,17 +10,20 @@ import {
 import Pagination from "../components/data-show/pagination";
 import React from "react";
 import { DataContext } from "../context-provider/data-context";
-import { getPaginatedData } from "../lib/dataService";
+import { getPaginatedData, getPairingStatisticalDataByID } from "../lib/dataService";
 import type { DataInterface } from "../types/data-store-type";
+import type { PairingStationData } from "../assets/data/data-types";
 
 export default function DataShowScreen() {
     const usenavigate = useNavigate();
-    const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData } = React.useContext(DataContext);
+    const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData, setTempDetailData } = React.useContext(DataContext);
     const { data } = getPaginatedData(Math.max(pagNum, 1), PAGINATION_LIMIT_OFFSET);
 
     const handleSelectId = (d: DataInterface) => {
         usenavigate(`/content/${d.Station_ID}`);
         setTempMainData(d);
+        const foundedDetailData: PairingStationData | null = getPairingStatisticalDataByID(d.Station_ID.toString());
+        setTempDetailData(foundedDetailData)
     }
 
     return (

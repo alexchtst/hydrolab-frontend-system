@@ -17,6 +17,20 @@ export interface MetaDataInterface {
   longitude: number;
 }
 
+export interface PairingStationData {
+  station_name: string;
+  data: number[];
+}
+
+export interface PairingDataContentInterface {
+  [id: string]: PairingStationData;
+}
+
+export interface PairingDataRAWInterface {
+  year: number[];
+  content: PairingDataContentInterface;
+}
+
 export interface GridMeta {
   lat_start: number;
   lon_start: number;
