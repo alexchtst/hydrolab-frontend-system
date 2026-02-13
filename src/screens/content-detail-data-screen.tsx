@@ -2,8 +2,13 @@ import { Scan } from "lucide-react";
 import { InformationComplementary, InformationPairing, InformationPoints } from "../components/contain-detail/information";
 import Map from "../components/contain-detail/map";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../components/dialog";
+import React from "react";
+import { DataContext } from "../context-provider/data-context";
 
 export default function ContentDetailDataScreen() {
+  const { tempMainData } = React.useContext(DataContext)
+  console.log(tempMainData);
+
   return (
     <div className="space-y-12 bg-blue-50">
 
@@ -25,7 +30,7 @@ export default function ContentDetailDataScreen() {
       {/* main information */}
       <div className="flex xl:flex-row flex-col py-3 justify-center items-center gap-10 p-10">
         <div className="w-full xl:w-[60%] p-5 rounded-sm bg-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-          <h1 className="text-3xl py-5">Information Title</h1>
+          <h1 className="text-3xl py-5">{tempMainData?.Station_Name}</h1>
           <InformationPairing
             title="Aliqua ipsum"
             conten="Dolor duis fugiat reprehenderit et dolor aliquip ullamco occaecat eu pariatur minim cillum."
@@ -51,7 +56,7 @@ export default function ContentDetailDataScreen() {
               <DialogTrigger asChild>
                 <button><Scan className="cursor-pointer" /></button>
               </DialogTrigger>
-              <DialogContent className="xl:w-200 w-150">
+              <DialogContent className="max-w-[90%]">
                 <DialogHeader>
                   <DialogTitle>Detail Daerah Terdekat</DialogTitle>
                   <DialogDescription>

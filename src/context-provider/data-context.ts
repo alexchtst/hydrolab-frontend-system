@@ -10,11 +10,16 @@ export type DataContextType = {
     setFetchedMainData: (d: DataInterface[] | null) => void;
     setFetchedDetailData: (d: DataContentInterface | null) => void;
 
-    tempMainData: DataInterface[] | null;
+    tempMainData: DataInterface | null;
     tempDetailData: DataContentInterface | null;
-    setTempMainData: (d: DataInterface[] | null) => void;
+    setTempMainData: (d: DataInterface | null) => void;
     setTempDetailData: (d: DataContentInterface | null) => void;
 
+    pagNum: number;
+    setPagNum: (d: number) => void;
+
+    TOTAL_PAGE: number | 600;
+    PAGINATION_LIMIT_OFFSET: number | 25;
 }
 
 export const DataContext = createContext<DataContextType>({
@@ -27,4 +32,10 @@ export const DataContext = createContext<DataContextType>({
     tempDetailData: null,
     setTempMainData: () => {},
     setTempDetailData: () => {},
+
+    pagNum: 1,
+    setPagNum: () => {},
+
+    TOTAL_PAGE: 403,
+    PAGINATION_LIMIT_OFFSET: 25
 })

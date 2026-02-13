@@ -8,9 +8,20 @@ import {
     TableRow
 } from "../components/data-show/table";
 import Pagination from "../components/data-show/pagination";
+import React from "react";
+import { DataContext } from "../context-provider/data-context";
+import { getPaginatedData } from "../lib/dataService";
+import type { DataInterface } from "../types/data-store-type";
 
 export default function DataShowScreen() {
     const usenavigate = useNavigate();
+    const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData } = React.useContext(DataContext);
+    const { data } = getPaginatedData(Math.max(pagNum, 1), PAGINATION_LIMIT_OFFSET);
+
+    const handleSelectId = (d: DataInterface) => {
+        usenavigate(`/content/${d.Station_ID}`);
+        setTempMainData(d);
+    }
 
     return (
         <div className="space-y-12">
@@ -49,77 +60,50 @@ export default function DataShowScreen() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-10">No.</TableHead>
-                                    <TableHead className="text-center w-32">COl 1</TableHead>
-                                    <TableHead className="text-center w-24">COl 2</TableHead>
-                                    <TableHead className="text-center w-24">COl 3</TableHead>
-                                    <TableHead className="text-center w-28">COl 4</TableHead>
-                                    <TableHead className="text-center w-28">COl 5</TableHead>
-                                    <TableHead className="text-center w-28">COl 6</TableHead>
-                                    <TableHead className="text-center w-28">COl 7</TableHead>
+                                    <TableHead className="w-10">Statition ID</TableHead>
+                                    <TableHead className="text-center w-32">Station Name</TableHead>
+                                    <TableHead className="text-center w-24">File Created</TableHead>
+                                    <TableHead className="text-center w-28">Years Covered</TableHead>
+                                    <TableHead className="text-center w-24">Elevation</TableHead>
+                                    <TableHead className="text-center w-28">Latitude</TableHead>
+                                    <TableHead className="text-center w-28">Longitude</TableHead>
+
+                                    {/* <TableHead className="text-center w-28">Records</TableHead> */}
+                                    {/* <TableHead className="text-center w-28">Start Year</TableHead> */}
+                                    {/* <TableHead className="text-center w-28">End Year</TableHead> */}
+
+                                    {/* <TableHead className="text-center w-28">Annual Mean</TableHead> */}
+                                    {/* <TableHead className="text-center w-28">Annual Max</TableHead> */}
+                                    {/* <TableHead className="text-center w-28">Missing Values</TableHead> */}
+
+
+
+                                    {/* <TableHead className="text-center w-28">Data Points</TableHead> */}
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                <TableRow>
-                                    <TableCell className="w-10">No.</TableCell>
-                                    <TableCell onClick={() => usenavigate('/content/test-data')} className="text-center w-32 text-sm hover:underline cursor-pointer">
-                                        CONTENT 1
-                                    </TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 2</TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 3</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 4</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 5</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 6</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 7</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell className="w-10">No.</TableCell>
-                                    <TableCell onClick={() => usenavigate('/content/test-data')} className="text-center w-32 text-sm hover:underline cursor-pointer">
-                                        CONTENT 1
-                                    </TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 2</TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 3</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 4</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 5</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 6</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 7</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell className="w-10">No.</TableCell>
-                                    <TableCell onClick={() => usenavigate('/content/test-data')} className="text-center w-32 text-sm hover:underline cursor-pointer">
-                                        CONTENT 1
-                                    </TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 2</TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 3</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 4</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 5</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 6</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 7</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell className="w-10">No.</TableCell>
-                                    <TableCell onClick={() => usenavigate('/content/test-data')} className="text-center w-32 text-sm hover:underline cursor-pointer">
-                                        CONTENT 1
-                                    </TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 2</TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 3</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 4</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 5</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 6</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 7</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell className="w-10">No.</TableCell>
-                                    <TableCell onClick={() => usenavigate('/content/test-data')} className="text-center w-32 text-sm hover:underline cursor-pointer">
-                                        CONTENT 1
-                                    </TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 2</TableCell>
-                                    <TableCell className="text-center w-24 text-sm">CONTENT 3</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 4</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 5</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 6</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">CONTENT 7</TableCell>
-                                </TableRow>
+                                {data.map((d, idx) => (
+                                    <TableRow key={idx}>
+                                        <TableCell onClick={() => handleSelectId(d)} className="w-10 text-sm text-center hover:underline cursor-pointer">{d.Station_ID}</TableCell>
+                                        <TableCell className="text-start w-24 text-sm">{d.Station_Name}</TableCell>
+                                        <TableCell className="text-center w-28 text-sm">{d.File_Created}</TableCell>
+                                        <TableCell className="text-center w-28 text-sm">{d.Years_Covered}</TableCell>
+                                        <TableCell className="text-center w-24 text-sm">{d.Elevation}</TableCell>
+                                        <TableCell className="text-center w-28 text-sm">{d.latitude}</TableCell>
+                                        <TableCell className="text-center w-28 text-sm">{d.longitude}</TableCell>
+
+                                        {/* <TableCell className="text-center w-28 text-sm">{d.Records}</TableCell> */}
+                                        {/* <TableCell className="text-center w-28 text-sm">{d.Start_Year}</TableCell> */}
+                                        {/* <TableCell className="text-center w-28 text-sm">{d.End_Year}</TableCell> */}
+
+                                        {/* <TableCell className="text-center w-28 text-sm">{d.Annual_Mean}</TableCell> */}
+                                        {/* <TableCell className="text-center w-28 text-sm">{d.Annual_Max}</TableCell> */}
+                                        {/* <TableCell className="text-center w-28 text-sm">{d.Missing_Values}</TableCell> */}
+
+
+                                        {/* <TableCell className="text-center w-28 text-sm">{d.Data_Points}</TableCell> */}
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </Table>
                     </div>
