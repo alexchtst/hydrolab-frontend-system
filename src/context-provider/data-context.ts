@@ -3,12 +3,15 @@ import type { DataContentInterface, DataInterface } from "../types/data-store-ty
 
 export const STORAGE_KEY_MAIN_DATA = "main-data";
 export const STORAGE_KEY_CONTENT_DATA = "content-data";
+export const STORAGE_KEY_LAT_DATA = "lat-data";
+export const STORAGE_KEY_LON_DATA = "lon-data";
 
 export type DataContextType = {
-    fetchedMainData: DataInterface[] | null;
-    fetchedDetailData: DataContentInterface | null;
-    setFetchedMainData: (d: DataInterface[] | null) => void;
-    setFetchedDetailData: (d: DataContentInterface | null) => void;
+    selectedLat: number | null;
+    setSelectedLat: (d: number | null) => void;
+
+    selectedLon: number | null;
+    setSelectedLon: (d: number | null) => void;
 
     tempMainData: DataInterface | null;
     tempDetailData: DataContentInterface | null;
@@ -23,10 +26,10 @@ export type DataContextType = {
 }
 
 export const DataContext = createContext<DataContextType>({
-    fetchedMainData: null,
-    fetchedDetailData: null,
-    setFetchedMainData: () => {},
-    setFetchedDetailData: () => {},
+    selectedLat: null,
+    setSelectedLat: () => {},
+    selectedLon: null,
+    setSelectedLon: () => {},
 
     tempMainData: null,
     tempDetailData: null,

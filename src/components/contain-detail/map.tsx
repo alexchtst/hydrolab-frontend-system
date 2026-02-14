@@ -3,39 +3,54 @@ import React from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-export default function Map() {
+export default function Map(
+    { createControll = false, isStatic = true, zoomLevel = 9, centralPoint= {lon: 110.37833662342864, lat: -7.940883389023307}, }: 
+    { createControll?: boolean, isStatic?: boolean, zoomLevel?: number, centralPoint?: {lon: number | 110.37833662342864, lat: number | -7.940883389023307} }
+) {
     const mapContainerRef = React.useRef<HTMLDivElement | null>(null);
+    const mapRef = React.useRef<maplibregl.Map | null>(null);
+
     React.useEffect(() => {
-        if (!mapContainerRef.current) return;
+        if (!mapRef.current && !mapContainerRef.current) {
+            console.log("map current sama map container ref udah ke load jadi skip ini semua bos")
+            return;
+        };
 
         const map = new maplibregl.Map({
-            container: mapContainerRef.current,
+            container: mapContainerRef.current ?? '',
             style: `https://api.maptiler.com/maps/satellite/style.json?key=${import.meta.env.VITE_PUBLIC_TOKEN_MAP}`,
-            center: [110.37833662342864, -7.940883389023307],
-            zoom: 13,
+            center: [centralPoint.lon, centralPoint.lat],
+            zoom: zoomLevel,
             attributionControl: false,
             interactive: true,
         });
 
-        map.dragPan.disable();
-        map.scrollZoom.disable();
-        map.doubleClickZoom.disable();
-        map.touchZoomRotate.disable();
-        map.dragRotate.disable();
-        map.keyboard.disable();
-        map.boxZoom.disable();
+        mapRef.current = map;
 
-        map.on("click", (e) => {
-            console.log({
-                lat: e.lngLat.lat,
-                long: e.lngLat.lng,
-            });
-        });
+
+        if (isStatic) {
+            map.dragPan.disable();
+            map.scrollZoom.disable();
+            map.doubleClickZoom.disable();
+            map.touchZoomRotate.disable();
+            map.dragRotate.disable();
+            map.keyboard.disable();
+            map.boxZoom.disable();
+        }
+
+        if (createControll) {
+            map.addControl(new maplibregl.NavigationControl(), "top-right");
+        }
+
+        new maplibregl.Marker()
+            .setLngLat([centralPoint.lon, centralPoint.lat],)
+            .addTo(map);
 
         return () => {
             map.remove();
         };
-    }, []);
+    }, [createControll, zoomLevel, isStatic, centralPoint]);
+
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div className="w-full h-full rounded-md">

@@ -1,9 +1,29 @@
 import React from "react";
-import { DataContext, STORAGE_KEY_CONTENT_DATA, STORAGE_KEY_MAIN_DATA } from "./data-context";
+import { DataContext, STORAGE_KEY_CONTENT_DATA, STORAGE_KEY_LAT_DATA, STORAGE_KEY_LON_DATA, STORAGE_KEY_MAIN_DATA } from "./data-context";
 import type { DataContentInterface, DataInterface } from "../types/data-store-type";
 
 export default function DataContextProvider({ children }: { children: React.ReactNode }) {
     const [pagNum, setPagNum] = React.useState(0);
+
+    const [lat, setLat] = React.useState<number | null>(() => {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY_LAT_DATA);
+            return stored ? Number(stored) : null;
+        } catch (error) {
+            console.error('Error loading from localStorage:', error);
+            return null;
+        }
+    });
+
+    const [long, setLong] = React.useState<number | null>(() => {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY_LON_DATA);
+            return stored ? Number(stored) : null;
+        } catch (error) {
+            console.error('Error loading from localStorage:', error);
+            return null;
+        }
+    });
 
     const [selectedData, setSelectedData] = React.useState<DataInterface | null>(() => {
         try {
@@ -52,12 +72,38 @@ export default function DataContextProvider({ children }: { children: React.Reac
         }
     }, []);
 
+    const setSelectedLat = React.useCallback((data: number | null) => {
+        setLat(data);
+        try {
+            if (data === null) {
+                localStorage.removeItem(STORAGE_KEY_LAT_DATA);
+            } else {
+                localStorage.setItem(STORAGE_KEY_LAT_DATA, data.toString());
+            }
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }, []);
+
+    const setSelectedLon = React.useCallback((data: number | null) => {
+        setLong(data);
+        try {
+            if (data === null) {
+                localStorage.removeItem(STORAGE_KEY_LON_DATA);
+            } else {
+                localStorage.setItem(STORAGE_KEY_LON_DATA, data.toString());
+            }
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }, []);
+
     return (
         <DataContext.Provider value={{
-            fetchedMainData: null,
-            fetchedDetailData: null,
-            setFetchedMainData: () => { },
-            setFetchedDetailData: () => { },
+            selectedLat: lat,
+            selectedLon: long,
+            setSelectedLat: setSelectedLat,
+            setSelectedLon: setSelectedLon,
 
             tempMainData: selectedData,
             tempDetailData: statisticData,

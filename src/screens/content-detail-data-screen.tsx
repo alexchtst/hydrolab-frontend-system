@@ -67,7 +67,12 @@ export default function ContentDetailDataScreen() {
                 </DialogHeader>
                 <div className="flex items-center">
                   <div className="w-full xl:h-100 h-50">
-                    <Map />
+                    <Map
+                      createControll={true}
+                      isStatic={false}
+                      zoomLevel={12}
+                      centralPoint={{ lat: tempMainData?.LAT ?? -7.940883389023307, lon: tempMainData?.LON ?? 110.37833662342864 }}
+                    />
                   </div>
                 </div>
               </DialogContent>
@@ -76,7 +81,9 @@ export default function ContentDetailDataScreen() {
 
           {/* MAP WRAPPER */}
           <div className="w-full h-80 xl:h-90 rounded-md overflow-hidden">
-            <Map />
+            <Map
+              centralPoint={{ lat: tempMainData?.LAT ?? -7.940883389023307, lon: tempMainData?.LON ?? 110.37833662342864 }}
+            />
           </div>
         </div>
 

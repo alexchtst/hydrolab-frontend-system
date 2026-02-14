@@ -10,13 +10,13 @@ import {
 import Pagination from "../components/data-show/pagination";
 import React from "react";
 import { DataContext } from "../context-provider/data-context";
-import { getPaginatedData, getPairingStatisticalDataByID } from "../lib/dataService";
+import { getPaginatedData, getPairingStatisticalDataByID, searchNearest } from "../lib/dataService";
 import type { DataInterface } from "../types/data-store-type";
-import type { PairingStationData } from "../assets/data/data-types";
+import type { MetaDataInterface, PairingStationData } from "../assets/data/data-types";
 
 export default function DataShowScreen() {
     const usenavigate = useNavigate();
-    const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData, setTempDetailData } = React.useContext(DataContext);
+    const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData, setTempDetailData, setSelectedLat, setSelectedLon } = React.useContext(DataContext);
     const { data } = getPaginatedData(Math.max(pagNum, 1), PAGINATION_LIMIT_OFFSET);
 
     const handleSelectId = (d: DataInterface) => {
@@ -24,6 +24,17 @@ export default function DataShowScreen() {
         setTempMainData(d);
         const foundedDetailData: PairingStationData | null = getPairingStatisticalDataByID(d.Station_ID.toString());
         setTempDetailData(foundedDetailData)
+    }
+
+    const [lat, setLat] = React.useState<string>("")
+    const [long, setLong] = React.useState<string>("")
+
+    const handleSearchData = (lat: number, long: number) => {
+        setSelectedLat(lat)
+        setSelectedLon(long)
+        const data: MetaDataInterface[] = searchNearest(lat, long)
+        console.log(data)
+        usenavigate(`/search`);
     }
 
     return (
@@ -49,14 +60,16 @@ export default function DataShowScreen() {
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:px-16">
                         <div className="flex flex-col gap-1 md:col-span-2">
                             <label htmlFor="long" className="text-sm font-semibold">Longitude</label>
-                            <input type="text" name="long" id="long" className="p-2 border-gray-300 rounded-md border" />
+                            <input value={long} type="text" name="long" id="long" className="p-2 border-gray-300 rounded-md border" onChange={(e) => setLong(e.target.value)} />
                         </div>
                         <div className="flex flex-col gap-1 md:col-span-2">
                             <label htmlFor="lat" className="text-sm font-semibold">Latitude</label>
-                            <input type="text" name="lat" id="lat" className="p-2 border-gray-300 rounded-md border" />
+                            <input value={lat} type="text" name="lat" id="lat" className="p-2 border-gray-300 rounded-md border" onChange={(e) => setLat(e.target.value)} />
                         </div>
                         <div className="flex items-end justify-end">
-                            <button className="p-2.5 bg-blue-500 text-white w-full rounded-md cursor-pointer hover:bg-blue-600 text-sm">Cari Cakupan Wilayah</button>
+                            <button onClick={() => {
+                                handleSearchData(parseFloat(lat), parseFloat(long));
+                            }} className="p-2.5 bg-blue-500 text-white w-full rounded-md cursor-pointer hover:bg-blue-600 text-sm">Cari Cakupan Wilayah</button>
                         </div>
                     </div>
                     <div className="p-4 rounded-md border border-gray-200">

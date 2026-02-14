@@ -124,10 +124,20 @@ export function haversine(
 export function searchNearest(
   lat: number,
   lon: number,
-  radius = 1,
-  limit = 20,
+  radiusKm = 1,
+  // limit = 20,
 ): MetaDataInterface[] {
-  const areas = getNeighborAreas(lat, lon, radius);
+
+  const CELL_LAT_KM = 10;
+  const CELL_LON_KM = 5;
+
+  // ambil radius maksimum
+  const cellRadiusLat = Math.ceil(radiusKm / CELL_LAT_KM);
+  const cellRadiusLon = Math.ceil(radiusKm / CELL_LON_KM);
+
+  const cellRadius = Math.max(cellRadiusLat, cellRadiusLon);
+
+  const areas = getNeighborAreas(lat, lon, cellRadius);
 
   let candidates: MetaDataInterface[] = [];
 
@@ -138,16 +148,16 @@ export function searchNearest(
     candidates = candidates.concat(data);
   }
 
-  const withDistance = candidates.map((item) => ({
-    ...item,
-    distance: haversine(lat, lon, item.latitude, item.longitude),
-  }));
-
-  // sort by distance
-  withDistance.sort((a, b) => a.distance - b.distance);
-
-  return withDistance.slice(0, limit);
+  return candidates
+    .map(item => ({
+      ...item,
+      distance: haversine(lat, lon, item.latitude, item.longitude),
+    }))
+    .filter(item => item.distance <= radiusKm) // FILTER PENTING
+    .sort((a, b) => a.distance - b.distance);
+    // .slice(0, limit);
 }
+
 
 const pairingStatisticalRawData: PairingDataRAWInterface =
   pairingStatisticalData as PairingDataRAWInterface;
