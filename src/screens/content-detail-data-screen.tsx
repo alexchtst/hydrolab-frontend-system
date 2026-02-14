@@ -5,11 +5,29 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import React from "react";
 import { DataContext } from "../context-provider/data-context";
 import { constantPairingStatisticalRawYearData } from "../lib/dataService";
+import { parseDateTime } from "../lib/utils";
+import { CustomizableBarChart, CustomizableLineChart, SimpleRadarChart, type ChartItem } from "../components/chart-component";
+
+function buildChartData(
+  years: number[],
+  values: number[]
+): ChartItem[] {
+  if (!years || !values) return [];
+
+  return years.map((year, index) => ({
+    year,
+    value: values[index] ?? 0,
+  }));
+}
 
 export default function ContentDetailDataScreen() {
   const { tempMainData, tempDetailData } = React.useContext(DataContext)
 
-  console.log(tempMainData, constantPairingStatisticalRawYearData, tempDetailData)
+  const years = constantPairingStatisticalRawYearData
+  const values = tempDetailData?.data ?? []
+  const chartData = buildChartData(years, values);
+
+  console.log(chartData)
 
   return (
     <div className="space-y-12 bg-blue-50">
@@ -34,16 +52,16 @@ export default function ContentDetailDataScreen() {
         <div className="w-full xl:w-[60%] p-5 rounded-sm bg-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
           <h1 className="text-3xl py-5">{tempMainData?.Station_Name}</h1>
           <InformationPairing
-            title="Aliqua ipsum"
-            conten="Dolor duis fugiat reprehenderit et dolor aliquip ullamco occaecat eu pariatur minim cillum."
+            title="Records Data"
+            conten={`Jumlah yang di record sebanyak ${tempMainData?.Records.toString() ?? "-"} data`}
           />
           <InformationPairing
-            title="Aliqua ipsum"
-            conten="Dolor duis fugiat reprehenderit et dolor aliquip ullamco occaecat eu pariatur minim cillum."
+            title="File Created"
+            conten={`${parseDateTime(tempMainData?.File_Created ?? "") ?? "-"}`}
           />
           <InformationPairing
-            title="Aliqua ipsum"
-            conten="Dolor duis fugiat reprehenderit et dolor aliquip ullamco occaecat eu pariatur minim cillum."
+            title="Periode Records"
+            conten={`Data dicatat dalam periode ${tempMainData?.Years_Covered ?? "-"}`}
           />
         </div>
         <div className="
@@ -93,28 +111,86 @@ export default function ContentDetailDataScreen() {
       {/* additional information */}
       <div className="flex md:flex-row flex-col py-3 justify-center items-center gap-10 p-10">
         <div className="w-full p-5 rounded-sm bg-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-          <h1 className="text-3xl py-5">Information Title</h1>
-          <p className="text-sm text-gray-500">Commodo officia id adipisicing laboris qui.</p>
-          <div className="py-5 space-y-4">
-            <InformationPoints
-              title="Non elit nostrud consectetur"
-              conten="Id duis voluptate ullamco eiusmod veniam id ullamco nostrud tempor."
-              additionalInfo="Dolor amet"
-            />
-            <InformationPoints
-              title="Non elit nostrud consectetur"
-              conten="Id duis voluptate ullamco eiusmod veniam id ullamco nostrud tempor."
-              additionalInfo="Dolor amet"
-            />
-            <InformationPoints
-              title="Non elit nostrud consectetur"
-              conten="Id duis voluptate ullamco eiusmod veniam id ullamco nostrud tempor."
-              additionalInfo="Dolor amet"
-            />
+          <h1 className="text-3xl py-5">Informasi Statistik Data</h1>
+          <p className="text-sm text-gray-500">Informasi Statistik di {tempMainData?.Station_Name}</p>
+          <div className="flex w-full flex-col xl:flex-row xl:justify-start xl:items-center">
+            <div className="py-5 space-y-4 xl:w-[60%]">
+              <InformationPoints
+                title="Rata Rata Data Curah Hujan"
+                conten={`Annual Mean dari data ${tempMainData?.Annual_Mean.toString() ?? "-"}`}
+                additionalInfo="Dolor amet"
+              />
+              <InformationPoints
+                title="Nilai Max Data Curah Hujan"
+                conten={`Annual Max dari data ${tempMainData?.Annual_Max.toString() ?? "-"}`}
+                additionalInfo="Dolor amet"
+              />
+              <InformationPoints
+                title="Jumlah Data Yang Hilang"
+                conten={`Data yang hilang sebanyak ${tempMainData?.Missing_Values}`}
+                additionalInfo="Dolor amet"
+              />
+            </div>
+            <div className="w-full flex justify-center items-center xl:w-[30%]">
+              <SimpleRadarChart
+                data={[
+                  {
+                    key: 'Mean',
+                    val: Number(tempMainData?.Annual_Mean),
+                    fullMark: 200,
+                  },
+                  {
+                    key: 'Max',
+                    val: Number(tempMainData?.Annual_Max),
+                    fullMark: 200,
+                  },
+                  {
+                    key: 'Missing',
+                    val: Number(tempMainData?.Missing_Values),
+                    fullMark: 154,
+                  },
+                ]}
+              />
+            </div>
           </div>
         </div>
       </div>
       {/* additional information */}
+
+      {/* graohical information */}
+      <div className="flex md:flex-row flex-col py-3 justify-center items-center gap-10 p-10">
+        <div className="w-full p-5 rounded-sm bg-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
+          <h1 className="text-3xl py-5">Grafik Data</h1>
+          <div className="py-5 space-y-4 hidden xl:block">
+            <CustomizableBarChart
+              data={chartData}
+              xAxisKey="year"
+              bars={[
+                {
+                  key: "value",
+                  color: "#82ca9d",
+                  name: "Value"
+                }
+              ]}
+            />
+          </div>
+          <div className="py-5 space-y-4 xl:hidden">
+            <CustomizableLineChart
+              data={chartData}
+              xAxisKey="year"
+              lines={[
+                {
+                  key: "value",
+                  color: "#82ca9d",
+                  name: "Value"
+                }
+              ]}
+            />
+            
+          </div>
+        </div>
+      </div>
+      {/* graohical information */}
 
       {/* complementary information */}
       <div className="flex md:flex-row flex-col py-3 justify-center items-center gap-10 p-10">

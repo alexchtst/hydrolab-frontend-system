@@ -12,6 +12,12 @@ import {
     Line
 } from 'recharts';
 
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+
+export interface ChartItem {
+  year: number;
+  value: number;
+}
 
 interface BarConfig {
     key: string;
@@ -235,3 +241,32 @@ export function CustomizableLineChart({
         </ResponsiveContainer>
     );
 }
+
+export interface RadarChartDataInterface {
+    key: string;
+    val: number
+    fullMark: number
+}
+
+// #endregion
+export const SimpleRadarChart = ({ data }: { data: RadarChartDataInterface[]}) => {
+    return (
+        <RadarChart
+            style={{ width: '100%', height: '100%', maxHeight: '80vh', aspectRatio: 1 }}
+            responsive
+            outerRadius="80%"
+            data={data}
+            margin={{
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: 20,
+            }}
+        >
+            <PolarGrid />
+            <PolarAngleAxis dataKey="key" />
+            <PolarRadiusAxis />
+            <Radar dataKey="val" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+        </RadarChart>
+    );
+};
