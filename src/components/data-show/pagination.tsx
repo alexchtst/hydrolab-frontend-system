@@ -40,7 +40,23 @@ export default function Pagination() {
       retreievedNumbers.push(1 + i)
     }
     setPaginationNumbers(retreievedNumbers)
-  }, [maxTempPagNum, minTempPagNum])
+  }, [maxTempPagNum, minTempPagNum]);
+
+  React.useEffect(() => {
+    const half = Math.floor(max_showed_pagination / 2);
+
+    let newMin = Math.max(pagNum - half - 1, 0);
+    let newMax = newMin + max_showed_pagination;
+
+    if (newMax > TOTAL_PAGE) {
+      newMax = TOTAL_PAGE;
+      newMin = Math.max(TOTAL_PAGE - max_showed_pagination, 0);
+    }
+
+    setMinTempPagNum(newMin);
+    setMaxTempPagNum(newMax);
+  }, [pagNum, TOTAL_PAGE]);
+
 
   return (
     <div className="w-full flex items-center justify-center gap-3 pb-5">

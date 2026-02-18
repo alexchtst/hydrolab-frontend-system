@@ -1,5 +1,5 @@
 import { Scan } from "lucide-react";
-import { InformationComplementary, InformationPairing, InformationPoints } from "../components/contain-detail/information";
+import { InformationPairing, InformationPoints } from "../components/contain-detail/information";
 import Map from "../components/contain-detail/map";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../components/dialog";
 import React from "react";
@@ -27,8 +27,6 @@ export default function ContentDetailDataScreen() {
   const values = tempDetailData?.data ?? []
   const chartData = buildChartData(years, values);
 
-  console.log(chartData)
-
   return (
     <div className="space-y-12 bg-blue-50">
 
@@ -36,12 +34,12 @@ export default function ContentDetailDataScreen() {
       <div className="bg-blue-50 md:px-8 px-6 py-24">
         <div className="flex flex-col gap-y-5 items-center">
           <h1 className="font-semibold md:max-w-175 text-center text-3xl max-w-[80vw]">
-            Adipisicing proident eu enim incididunt excepteur.
+            Detail Informasi Data Stasiun Klimatologi
           </h1>
           <h2 className="md:max-w-200 max-w-[90vw] text-center text-gray-500">
-            Commodo esse irure veniam occaecat consectetur sit est in aliqua nostrud commodo est.
-            Culpa in consectetur ex est esse pariatur nulla ipsum laboris id sint Lorem laborum.
-            Ea Lorem et occaecat sint laboris nisi reprehenderit non mollit tempor occaecat mollit.
+            Halaman ini menampilkan informasi lengkap mengenai data curah hujan,
+            periode pencatatan, lokasi stasiun, serta analisis statistik berdasarkan
+            data historis yang telah dikumpulkan.
           </h2>
         </div>
       </div>
@@ -186,38 +184,11 @@ export default function ContentDetailDataScreen() {
                 }
               ]}
             />
-            
+
           </div>
         </div>
       </div>
       {/* graohical information */}
-
-      {/* complementary information */}
-      <div className="flex md:flex-row flex-col py-3 justify-center items-center gap-10 p-10">
-        <div className="w-full p-5 rounded-sm bg-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-          <h1 className="text-3xl py-5">Information Title</h1>
-          <p className="text-sm text-gray-500">Commodo officia id adipisicing laboris qui.</p>
-          <div className="py-5 space-y-4">
-            <InformationComplementary
-              title="Reprehenderit laboris"
-              description="Fugiat est labore quis aliqua magna eiusmod anim duis commodo non aute ipsum."
-            />
-            <InformationComplementary
-              title="Reprehenderit laboris"
-              description="Fugiat est labore quis aliqua magna eiusmod anim duis commodo non aute ipsum."
-            />
-            <InformationComplementary
-              title="Reprehenderit laboris"
-              description="Fugiat est labore quis aliqua magna eiusmod anim duis commodo non aute ipsum."
-            />
-            <InformationComplementary
-              title="Reprehenderit laboris"
-              description="Fugiat est labore quis aliqua magna eiusmod anim duis commodo non aute ipsum."
-            />
-          </div>
-        </div>
-      </div>
-      {/* complementary information */}
 
     </div>
   );

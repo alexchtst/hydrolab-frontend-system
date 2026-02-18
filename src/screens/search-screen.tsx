@@ -1,16 +1,38 @@
 import React from "react";
 import { DataContext } from "../context-provider/data-context";
-import type { MetaDataInterface } from "../assets/data/data-types";
-import { searchNearest } from "../lib/dataService";
+import type { MetaDataInterface, PairingStationData } from "../assets/data/data-types";
+import { getPairingStatisticalDataByID, searchNearest } from "../lib/dataService";
 import SearchMap from "../components/contain-detail/search-map";
 
+import { useNavigate } from "react-router-dom";
+
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "../components/data-show/table";
+import type { DataInterface } from "../types/data-store-type";
+
 export default function SearchScreen() {
-    const { selectedLat, selectedLon } = React.useContext(DataContext);
+    const { selectedLon, selectedLat, setTempMainData, setTempDetailData, } = React.useContext(DataContext);
+
     const [lat, setLat] = React.useState<string>(selectedLat?.toString() ?? "");
     const [long, setLong] = React.useState<string>(selectedLon?.toString() ?? "");
     const [range, setRange] = React.useState<string>("500");
 
     const [searchData, setSearchData] = React.useState<MetaDataInterface[]>([]);
+
+    const usenavigate = useNavigate();
+
+    const handleSelectId = (d: DataInterface) => {
+        usenavigate(`/content/${d.Station_ID}`);
+        setTempMainData(d);
+        const foundedDetailData: PairingStationData | null = getPairingStatisticalDataByID(d.Station_ID.toString());
+        setTempDetailData(foundedDetailData)
+    }
 
     function handleSearch() {
         if (!lat || !long || !range) {
@@ -27,11 +49,8 @@ export default function SearchScreen() {
 
         const data: MetaDataInterface[] = searchNearest(parsedLat, parsedLong, parsedRange / 1000)
         setSearchData(data)
-        // console.log(data)
         console.log("Search center:", parsedLat, parsedLong, parsedRange / 1000);
     }
-
-    
 
 
     return (
@@ -41,14 +60,20 @@ export default function SearchScreen() {
             <div className="md:px-8 px-6 pt-12">
                 <div className="flex flex-col gap-y-5 items-center">
                     <h1 className="font-semibold text-center text-3xl max-w-[80vw]">
-                        Adipisicing proident eu enim incididunt excepteur.
+                        Pencarian Stasiun Berdasarkan Lokasi
                     </h1>
 
                     <h2 className="max-w-[90vw] text-center text-gray-500">
-                        Commodo esse irure veniam occaecat consectetur sit est in aliqua.
+                        Cari dan temukan stasiun pengamatan terdekat berdasarkan
+                        koordinat latitude, longitude, dan radius pencarian yang ditentukan.
                     </h2>
                 </div>
             </div>
+            <p className="text-center text-sm text-gray-500">
+                Masukkan koordinat lokasi pusat pencarian dan tentukan jarak maksimum
+                untuk menampilkan stasiun di sekitar wilayah tersebut.
+            </p>
+
 
             {/* Form */}
             <div className="w-full flex justify-center">
@@ -108,14 +133,44 @@ export default function SearchScreen() {
                     <SearchMap
                         isStatic={false}
                         createControll={true}
-                        centralPoint={{lat: parseFloat(lat), lon: parseFloat(long)}}
+                        centralPoint={{ lat: parseFloat(lat), lon: parseFloat(long) }}
                         range={parseFloat(range) / 1000}
                         showedStation={searchData}
+                        zoomLevel={12}
                     />
-
                 </div>
             </div>
 
+            <div className="w-full flex justify-center px-20 py-8">
+                <div className="w-full p-4 rounded-md border border-gray-200">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-10">Statition ID</TableHead>
+                                <TableHead className="text-center w-32">Station Name</TableHead>
+                                <TableHead className="text-center w-24">File Created</TableHead>
+                                <TableHead className="text-center w-28">Years Covered</TableHead>
+                                <TableHead className="text-center w-24">Elevation</TableHead>
+                                <TableHead className="text-center w-28">Latitude</TableHead>
+                                <TableHead className="text-center w-28">Longitude</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {searchData.map((d, idx) => (
+                                <TableRow key={idx}>
+                                    <TableCell onClick={() => handleSelectId(d)} className="w-10 text-sm text-center hover:underline cursor-pointer">{d.Station_ID}</TableCell>
+                                    <TableCell className="text-start w-24 text-sm">{d.Station_Name}</TableCell>
+                                    <TableCell className="text-center w-28 text-sm">{d.File_Created}</TableCell>
+                                    <TableCell className="text-center w-28 text-sm">{d.Years_Covered}</TableCell>
+                                    <TableCell className="text-center w-24 text-sm">{d.Elevation}</TableCell>
+                                    <TableCell className="text-center w-28 text-sm">{d.latitude}</TableCell>
+                                    <TableCell className="text-center w-28 text-sm">{d.longitude}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
         </div>
     );
 }

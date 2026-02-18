@@ -5,6 +5,7 @@ export const STORAGE_KEY_MAIN_DATA = "main-data";
 export const STORAGE_KEY_CONTENT_DATA = "content-data";
 export const STORAGE_KEY_LAT_DATA = "lat-data";
 export const STORAGE_KEY_LON_DATA = "lon-data";
+export const STORAGE_KEY_PAG_NUM = "pag-num";
 
 export type DataContextType = {
     selectedLat: number | null;

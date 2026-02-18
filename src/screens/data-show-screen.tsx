@@ -43,12 +43,12 @@ export default function DataShowScreen() {
             <div className="bg-blue-50 md:px-8 px-6 py-24">
                 <div className="flex flex-col gap-y-5 items-center">
                     <h1 className="font-semibold md:max-w-175 text-center text-3xl max-w-[80vw]">
-                        Adipisicing proident eu enim incididunt excepteur.
+                        Daftar Data Stasiun Pengamatan
                     </h1>
                     <h2 className="md:max-w-200 max-w-[90vw] text-center text-gray-500">
-                        Commodo esse irure veniam occaecat consectetur sit est in aliqua nostrud commodo est.
-                        Culpa in consectetur ex est esse pariatur nulla ipsum laboris id sint Lorem laborum.
-                        Ea Lorem et occaecat sint laboris nisi reprehenderit non mollit tempor occaecat mollit.
+                        Halaman ini menampilkan daftar lengkap stasiun pengamatan beserta
+                        informasi lokasi, periode pencatatan, dan metadata lainnya
+                        untuk mendukung analisis data klimatologi.
                     </h2>
                 </div>
             </div>
@@ -69,7 +69,7 @@ export default function DataShowScreen() {
                         <div className="flex items-end justify-end">
                             <button onClick={() => {
                                 handleSearchData(parseFloat(lat), parseFloat(long));
-                            }} className="p-2.5 bg-blue-500 text-white w-full rounded-md cursor-pointer hover:bg-blue-600 text-sm">Cari Cakupan Wilayah</button>
+                            }} className="p-2.5 bg-blue-500 text-white w-full rounded-md cursor-pointer hover:bg-blue-600 text-sm">Cari Cakupan Wilayah (500m)</button>
                         </div>
                     </div>
                     <div className="p-4 rounded-md border border-gray-200">
@@ -83,18 +83,6 @@ export default function DataShowScreen() {
                                     <TableHead className="text-center w-24">Elevation</TableHead>
                                     <TableHead className="text-center w-28">Latitude</TableHead>
                                     <TableHead className="text-center w-28">Longitude</TableHead>
-
-                                    {/* <TableHead className="text-center w-28">Records</TableHead> */}
-                                    {/* <TableHead className="text-center w-28">Start Year</TableHead> */}
-                                    {/* <TableHead className="text-center w-28">End Year</TableHead> */}
-
-                                    {/* <TableHead className="text-center w-28">Annual Mean</TableHead> */}
-                                    {/* <TableHead className="text-center w-28">Annual Max</TableHead> */}
-                                    {/* <TableHead className="text-center w-28">Missing Values</TableHead> */}
-
-
-
-                                    {/* <TableHead className="text-center w-28">Data Points</TableHead> */}
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -107,17 +95,6 @@ export default function DataShowScreen() {
                                         <TableCell className="text-center w-24 text-sm">{d.Elevation}</TableCell>
                                         <TableCell className="text-center w-28 text-sm">{d.latitude}</TableCell>
                                         <TableCell className="text-center w-28 text-sm">{d.longitude}</TableCell>
-
-                                        {/* <TableCell className="text-center w-28 text-sm">{d.Records}</TableCell> */}
-                                        {/* <TableCell className="text-center w-28 text-sm">{d.Start_Year}</TableCell> */}
-                                        {/* <TableCell className="text-center w-28 text-sm">{d.End_Year}</TableCell> */}
-
-                                        {/* <TableCell className="text-center w-28 text-sm">{d.Annual_Mean}</TableCell> */}
-                                        {/* <TableCell className="text-center w-28 text-sm">{d.Annual_Max}</TableCell> */}
-                                        {/* <TableCell className="text-center w-28 text-sm">{d.Missing_Values}</TableCell> */}
-
-
-                                        {/* <TableCell className="text-center w-28 text-sm">{d.Data_Points}</TableCell> */}
                                     </TableRow>
                                 ))}
                             </TableBody>

@@ -1,9 +1,17 @@
 import React from "react";
-import { DataContext, STORAGE_KEY_CONTENT_DATA, STORAGE_KEY_LAT_DATA, STORAGE_KEY_LON_DATA, STORAGE_KEY_MAIN_DATA } from "./data-context";
+import { DataContext, STORAGE_KEY_CONTENT_DATA, STORAGE_KEY_LAT_DATA, STORAGE_KEY_LON_DATA, STORAGE_KEY_MAIN_DATA, STORAGE_KEY_PAG_NUM } from "./data-context";
 import type { DataContentInterface, DataInterface } from "../types/data-store-type";
 
 export default function DataContextProvider({ children }: { children: React.ReactNode }) {
-    const [pagNum, setPagNum] = React.useState(0);
+    const [pagNum, setPagNum] = React.useState<number>(() => {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY_PAG_NUM);
+            return stored ? Number(stored) : 0;
+        } catch (error) {
+            console.error('Error loading from localStorage:', error);
+            return 0;
+        }
+    });
 
     const [lat, setLat] = React.useState<number | null>(() => {
         try {
@@ -58,7 +66,6 @@ export default function DataContextProvider({ children }: { children: React.Reac
         }
     }, []);
 
-
     const setTempDetailData = React.useCallback((data: DataContentInterface | null) => {
         setStatisticData(data);
         try {
@@ -98,6 +105,19 @@ export default function DataContextProvider({ children }: { children: React.Reac
         }
     }, []);
 
+    const setPaginationNum = React.useCallback((data: number) => {
+        setPagNum(data);
+        try {
+            if (data === null) {
+                localStorage.removeItem(STORAGE_KEY_PAG_NUM);
+            } else {
+                localStorage.setItem(STORAGE_KEY_PAG_NUM, data.toString());
+            }
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }, []);
+
     return (
         <DataContext.Provider value={{
             selectedLat: lat,
@@ -111,7 +131,7 @@ export default function DataContextProvider({ children }: { children: React.Reac
             setTempDetailData: setTempDetailData,
 
             pagNum: pagNum,
-            setPagNum: setPagNum,
+            setPagNum: setPaginationNum,
 
             TOTAL_PAGE: 403,
             PAGINATION_LIMIT_OFFSET: 25
