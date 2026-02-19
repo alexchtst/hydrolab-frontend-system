@@ -69,7 +69,7 @@ export default function DataShowScreen() {
                         <div className="flex items-end justify-end">
                             <button onClick={() => {
                                 handleSearchData(parseFloat(lat), parseFloat(long));
-                            }} className="p-2.5 bg-blue-500 text-white w-full rounded-md cursor-pointer hover:bg-blue-600 text-sm">Cari Cakupan Wilayah (500m)</button>
+                            }} className="p-2.5 bg-blue-500 text-white w-full rounded-md cursor-pointer hover:bg-blue-600 text-sm">Cari (500m)</button>
                         </div>
                     </div>
                     <div className="p-4 rounded-md border border-gray-200">

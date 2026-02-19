@@ -34,17 +34,12 @@ export default function SearchMap({
     const mapRef = React.useRef<maplibregl.Map | null>(null);
     const markersRef = React.useRef<maplibregl.Marker[]>([]);
 
-    console.log(showedStation);
-    
-
     const center = React.useMemo<[number, number]>(() => [
         centralPoint.lon,
         centralPoint.lat,
     ], [centralPoint.lon, centralPoint.lat]);
 
-    console.log("Circle center:", center, range);
-
-    const radius = range; // km
+    const radius = range;
     const options = { steps: 64, units: "kilometers" as const };
 
     const circleData: Feature<Polygon> = React.useMemo(() => {

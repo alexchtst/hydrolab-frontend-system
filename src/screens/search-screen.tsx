@@ -52,6 +52,15 @@ export default function SearchScreen() {
         console.log("Search center:", parsedLat, parsedLong, parsedRange / 1000);
     }
 
+    if (
+        !lat || !long ||
+        lat === "" || long === "" ||
+        lat === null || long === null ||
+        lat === "NaN" || long === "NaN"
+    ) {
+        setLat("-7.940883389023307");
+        setLong("110.37833662342864");
+    }
 
     return (
         <div className="space-y-8 bg-blue-50 pb-12">
