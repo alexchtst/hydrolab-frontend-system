@@ -20,7 +20,7 @@ export default function DataShowScreen() {
     const { data } = getPaginatedData(Math.max(pagNum, 1), PAGINATION_LIMIT_OFFSET);
 
     const handleSelectId = (d: DataInterface) => {
-        usenavigate(`/content/${d.Station_ID}`);
+        usenavigate(`/content`);
         setTempMainData(d);
         const foundedDetailData: PairingStationData | null = getPairingStatisticalDataByID(d.Station_ID.toString());
         setTempDetailData(foundedDetailData)

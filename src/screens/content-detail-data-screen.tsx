@@ -6,7 +6,7 @@ import React from "react";
 import { DataContext } from "../context-provider/data-context";
 import { constantPairingStatisticalRawYearData } from "../lib/dataService";
 import { parseDateTime } from "../lib/utils";
-import { CustomizableBarChart, CustomizableLineChart, SimpleRadarChart, type ChartItem } from "../components/chart-component";
+import { CustomizableBarChart, SimpleRadarChart, type ChartItem } from "../components/chart-component";
 
 function buildChartData(
   years: number[],
@@ -159,7 +159,7 @@ export default function ContentDetailDataScreen() {
       <div className="flex md:flex-row flex-col py-3 justify-center items-center gap-10 p-10">
         <div className="w-full p-5 rounded-sm bg-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
           <h1 className="text-3xl py-5">Grafik Data</h1>
-          <div className="py-5 space-y-4 hidden xl:block">
+          <div className="py-5 space-y-4">
             <CustomizableBarChart
               data={chartData}
               xAxisKey="year"
@@ -171,20 +171,6 @@ export default function ContentDetailDataScreen() {
                 }
               ]}
             />
-          </div>
-          <div className="py-5 space-y-4 xl:hidden">
-            <CustomizableLineChart
-              data={chartData}
-              xAxisKey="year"
-              lines={[
-                {
-                  key: "value",
-                  color: "#82ca9d",
-                  name: "Value"
-                }
-              ]}
-            />
-
           </div>
         </div>
       </div>

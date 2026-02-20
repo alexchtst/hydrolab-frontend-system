@@ -10,7 +10,7 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<DataShowScreen />} index />
-          <Route path="/content/:id" element={<ContentDetailDataScreen />} />
+          <Route path="/content" element={<ContentDetailDataScreen />} />
           <Route path="/search" element={<SearchScreen />} />
         </Routes>
       </Router>

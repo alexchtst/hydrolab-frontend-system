@@ -28,7 +28,7 @@ export default function SearchScreen() {
     const usenavigate = useNavigate();
 
     const handleSelectId = (d: DataInterface) => {
-        usenavigate(`/content/${d.Station_ID}`);
+        usenavigate(`/content`);
         setTempMainData(d);
         const foundedDetailData: PairingStationData | null = getPairingStatisticalDataByID(d.Station_ID.toString());
         setTempDetailData(foundedDetailData)
@@ -62,6 +62,19 @@ export default function SearchScreen() {
         setLong("110.37833662342864");
     }
 
+    const MIN_ZOOM = 10
+    const MAX_ZOOM = 25
+
+    const r = Math.max(1, parseFloat(range)) // hindari log(0)
+
+    const zoomLevel = Math.max(
+        MIN_ZOOM,
+        Math.min(
+            MAX_ZOOM,
+            Math.round(18 - Math.log10(r) * 2)
+        )
+    )
+
     return (
         <div className="space-y-8 bg-blue-50 pb-12">
 
@@ -78,16 +91,10 @@ export default function SearchScreen() {
                     </h2>
                 </div>
             </div>
-            <p className="text-center text-sm text-gray-500">
-                Masukkan koordinat lokasi pusat pencarian dan tentukan jarak maksimum
-                untuk menampilkan stasiun di sekitar wilayah tersebut.
-            </p>
-
 
             {/* Form */}
             <div className="w-full flex justify-center">
                 <div className="w-[70%] bg-white p-6 rounded-lg shadow-md">
-
                     <div className="grid md:grid-cols-4 gap-4">
 
                         {/* Latitude */}
@@ -145,13 +152,13 @@ export default function SearchScreen() {
                         centralPoint={{ lat: parseFloat(lat), lon: parseFloat(long) }}
                         range={parseFloat(range) / 1000}
                         showedStation={searchData}
-                        zoomLevel={12}
+                        zoomLevel={zoomLevel}
                     />
                 </div>
             </div>
 
             <div className="w-full flex justify-center px-20 py-8">
-                <div className="w-full p-4 rounded-md border border-gray-200">
+                <div className="w-full p-4 rounded-md border border-gray-200 bg-white">
                     <Table>
                         <TableHeader>
                             <TableRow>
