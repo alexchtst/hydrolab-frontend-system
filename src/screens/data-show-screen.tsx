@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { useNavigate } from "react-router-dom";
 import {
     Table,
@@ -10,21 +11,42 @@ import {
 import Pagination from "../components/data-show/pagination";
 import React from "react";
 import { DataContext } from "../context-provider/data-context";
-import { getPaginatedData, getPairingStatisticalDataByID, searchNearest } from "../lib/dataService";
 import type { DataInterface } from "../types/data-store-type";
-import type { MetaDataInterface, PairingStationData } from "../assets/data/data-types";
+import type { PairingStationData } from "../assets/data/data-types";
+import type { APIGetPaginationInterface, APIGetPairingDataInterface } from "../types/connection-type";
+import { execvFetchFunc, useFetchData } from "../lib/useConnection";
 
 export default function DataShowScreen() {
     const usenavigate = useNavigate();
     const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData, setTempDetailData, setSelectedLat, setSelectedLon } = React.useContext(DataContext);
-    const { data } = getPaginatedData(Math.max(pagNum, 1), PAGINATION_LIMIT_OFFSET);
+    const page = Math.max(pagNum, 1)
+    const { data, err, isLoading } = useFetchData<APIGetPaginationInterface>(`/data/paginated?page=${page}&limit=${PAGINATION_LIMIT_OFFSET}`)
 
-    const handleSelectId = (d: DataInterface) => {
-        usenavigate(`/content`);
+    const handleSelectId = async (d: DataInterface) => {
         setTempMainData(d);
-        const foundedDetailData: PairingStationData | null = getPairingStatisticalDataByID(d.Station_ID.toString());
-        setTempDetailData(foundedDetailData)
-    }
+
+        // [TODO: TIDY UP THIS ALEX PLEASE]
+        const result = await execvFetchFunc<APIGetPairingDataInterface>(`/pairing/${d.Station_ID.toString()}`);
+
+        if (!result) {
+            return;
+        }
+
+        if (typeof result === "string" || "error" in result) {
+            console.error(typeof result === "string" ? result : (result as Record<string, unknown>).message || result);
+            return;
+        }
+
+        const foundedDetailData: PairingStationData = {
+            station_name: result.station_name,
+            data: result.data,
+        };
+
+        setTempDetailData(foundedDetailData);
+        // [TODO: TIDY UP THIS ALEX PLEASE]
+
+        usenavigate(`/content`);;
+    };
 
     const [lat, setLat] = React.useState<string>("")
     const [long, setLong] = React.useState<string>("")
@@ -32,10 +54,13 @@ export default function DataShowScreen() {
     const handleSearchData = (lat: number, long: number) => {
         setSelectedLat(lat)
         setSelectedLon(long)
-        const data: MetaDataInterface[] = searchNearest(lat, long)
-        console.log(data)
         usenavigate(`/search`);
     }
+
+    if (isLoading) return <div>is loading</div>
+
+    console.log(err, data?.data, isLoading)
+
 
     return (
         <div className="space-y-12">
@@ -86,17 +111,23 @@ export default function DataShowScreen() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data.map((d, idx) => (
-                                    <TableRow key={idx}>
-                                        <TableCell onClick={() => handleSelectId(d)} className="w-10 text-sm text-center hover:underline cursor-pointer">{d.Station_ID}</TableCell>
-                                        <TableCell className="text-start w-24 text-sm">{d.Station_Name}</TableCell>
-                                        <TableCell className="text-center w-28 text-sm">{d.File_Created}</TableCell>
-                                        <TableCell className="text-center w-28 text-sm">{d.Years_Covered}</TableCell>
-                                        <TableCell className="text-center w-24 text-sm">{d.Elevation}</TableCell>
-                                        <TableCell className="text-center w-28 text-sm">{d.latitude}</TableCell>
-                                        <TableCell className="text-center w-28 text-sm">{d.longitude}</TableCell>
+                                {isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center text-gray-400 py-8">Memuat data...</TableCell>
                                     </TableRow>
-                                ))}
+                                ) : (
+                                    data?.data.map((d, idx) => (
+                                        <TableRow key={idx}>
+                                            <TableCell onClick={() => handleSelectId(d)} className="w-10 text-sm text-center hover:underline cursor-pointer">{d.Station_ID}</TableCell>
+                                            <TableCell className="text-start w-24 text-sm">{d.Station_Name}</TableCell>
+                                            <TableCell className="text-center w-28 text-sm">{d.File_Created}</TableCell>
+                                            <TableCell className="text-center w-28 text-sm">{d.Years_Covered}</TableCell>
+                                            <TableCell className="text-center w-24 text-sm">{d.Elevation}</TableCell>
+                                            <TableCell className="text-center w-28 text-sm">{d.latitude}</TableCell>
+                                            <TableCell className="text-center w-28 text-sm">{d.longitude}</TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
                             </TableBody>
                         </Table>
                     </div>
