@@ -6,7 +6,7 @@ import React from "react";
 import { DataContext } from "../context-provider/data-context";
 import { constantPairingStatisticalRawYearData } from "../lib/dataService";
 import { parseDateTime } from "../lib/utils";
-import { CustomizableBarChart, SimpleRadarChart, type ChartItem } from "../components/chart-component";
+import { CustomizableBarChart, type ChartItem } from "../components/chart-component";
 
 function buildChartData(
   years: number[],
@@ -21,7 +21,7 @@ function buildChartData(
 }
 
 export default function ContentDetailDataScreen() {
-  const { tempMainData, tempDetailData } = React.useContext(DataContext)
+  const { tempMainData, tempDetailData, tempStatisticalData } = React.useContext(DataContext)
 
   const years = constantPairingStatisticalRawYearData
   const values = tempDetailData?.data ?? []
@@ -112,29 +112,6 @@ export default function ContentDetailDataScreen() {
           <h1 className="text-3xl py-5">Informasi Statistik Data</h1>
           <p className="text-sm text-gray-500">Informasi Statistik di {tempMainData?.Station_Name}</p>
           <div className="flex w-full flex-col justify-start">
-            <div className="py-5 space-y-4 w-full flex flex-wrap flex-row">
-              <div className="w-fit">
-                <InformationPoints
-                  title="Rata Rata Data Curah Hujan"
-                  conten={`Annual Mean dari data ${tempMainData?.Annual_Mean.toString() ?? "-"}`}
-                  additionalInfo="Dolor amet"
-                />
-              </div>
-              <div className="w-fit">
-                <InformationPoints
-                  title="Nilai Max Data Curah Hujan"
-                  conten={`Annual Max dari data ${tempMainData?.Annual_Max.toString() ?? "-"}`}
-                  additionalInfo="Dolor amet"
-                />
-              </div>
-              <div className="w-fit">
-                <InformationPoints
-                  title="Jumlah Data Yang Hilang"
-                  conten={`Data yang hilang sebanyak ${tempMainData?.["Data Hilang"]}`}
-                  additionalInfo="Dolor amet"
-                />
-              </div>
-            </div>
             <div className="flex w-full flex-col xl:flex-row xl:justify-start xl:items-center">
               <div className="py-5 space-y-4 w-full">
                 <InformationPoints
@@ -148,30 +125,26 @@ export default function ContentDetailDataScreen() {
                   additionalInfo="Dolor amet"
                 />
                 <InformationPoints
-                  title="Jumlah Data Yang Hilang"
-                  conten={`Data yang hilang sebanyak ${tempMainData?.["Data Hilang"]}`}
+                  title="Standar Deviasi Data"
+                  conten={`Standar Deviasi Data ${tempStatisticalData?.std} dari sample sebanyak ${tempStatisticalData?.sample_size}`}
                   additionalInfo="Dolor amet"
                 />
               </div>
-              <div className="w-full flex justify-center items-center xl:w-[30%]">
-                <SimpleRadarChart
-                  data={[
-                    {
-                      key: 'Mean',
-                      val: Number(tempMainData?.Annual_Mean),
-                      fullMark: 200,
-                    },
-                    {
-                      key: 'Max',
-                      val: Number(tempMainData?.Annual_Max),
-                      fullMark: 200,
-                    },
-                    {
-                      key: 'Missing',
-                      val: Number(tempMainData?.["Data Hilang"]),
-                      fullMark: 154,
-                    },
-                  ]}
+              <div className="py-5 space-y-4 w-full">
+                <InformationPoints
+                  title="Probable Maximum Precipitation"
+                  conten={`Annual Mean dari data ${tempStatisticalData?.pmp_evt ?? "-"}`}
+                  additionalInfo="Dolor amet"
+                />
+                <InformationPoints
+                  title="PMP metode Hershfield"
+                  conten={`Annual Max dari data ${tempStatisticalData?.pmp_hers.toString() ?? "-"}`}
+                  additionalInfo="Dolor amet"
+                />
+                <InformationPoints
+                  title="PMP WMO"
+                  conten={`Data yang hilang sebanyak ${tempStatisticalData?.pmp_wmo ?? "-"}`}
+                  additionalInfo="Dolor amet"
                 />
               </div>
             </div>

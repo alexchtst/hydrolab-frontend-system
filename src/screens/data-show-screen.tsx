@@ -11,14 +11,14 @@ import Pagination from "../components/data-show/pagination";
 import React from "react";
 import { DataContext } from "../context-provider/data-context";
 import type { DataInterface } from "../types/data-store-type";
-import type { PairingStationData } from "../assets/data/data-types";
+import type { PairingStationData, StatisticalData } from "../assets/data/data-types";
 import type { APIGetPaginationInterface, APIGetPairingDataInterface } from "../types/connection-type";
 import { execvFetchFunc, useFetchData } from "../lib/useConnection";
 import LoadingComponent from "../components/loading-component";
 
 export default function DataShowScreen() {
     const usenavigate = useNavigate();
-    const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData, setTempDetailData, setSelectedLat, setSelectedLon } = React.useContext(DataContext);
+    const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData, setTempDetailData, setTempStatisticalData, setSelectedLat, setSelectedLon } = React.useContext(DataContext);
     const page = Math.max(pagNum, 1)
     const { data, isLoading } = useFetchData<APIGetPaginationInterface>(`/online-data/data/paginated?page=${page}&limit=${PAGINATION_LIMIT_OFFSET}`)
 
@@ -43,6 +43,22 @@ export default function DataShowScreen() {
         };
 
         setTempDetailData(foundedDetailData);
+
+        const resultStat = await execvFetchFunc<StatisticalData>(`/online-data/statistical/${d.Station_ID.toString()}`);
+
+        if (!resultStat) {
+            return;
+        }
+
+        if (typeof resultStat === "string" || "error" in result) {
+            console.error(typeof result === "string" ? result : (resultStat as unknown as Record<string, unknown>).message || result);
+            return;
+        }
+
+        const foundedStatData: StatisticalData = resultStat;
+
+        setTempStatisticalData(foundedStatData)
+
         // [TODO: TIDY UP THIS ALEX PLEASE]
 
         usenavigate(`/content`);;

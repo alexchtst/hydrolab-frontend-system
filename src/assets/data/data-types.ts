@@ -17,6 +17,20 @@ export interface MetaDataInterface {
   longitude: number;
 }
 
+export interface StatisticalData {
+  Station_ID: number;
+  _id: string;
+  max: number;
+  mean: number;
+  median: number;
+  min: number;
+  pmp_evt: number;
+  pmp_hers: number;
+  pmp_wmo: number;
+  sample_size: number;
+  std: number;
+}
+
 export interface PairingStationData {
   station_name: string;
   data: number[];
