@@ -19,8 +19,8 @@ export interface APIGetSearchnearestDataInterface {
     Data_Points: number;
     Years_Covered: string;
     Records: number;
-    Start_Year: number;
-    End_Year: number;
+    "Tahun Mulai": number;
+    "Tahun Akhir": number;
     Annual_Mean: number;
     Annual_Max: number;
     Missing_Values: number;
