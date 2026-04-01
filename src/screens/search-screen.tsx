@@ -82,7 +82,6 @@ export default function SearchScreen() {
 
         data = result
         setSearchData(data)
-        console.log("Search center:", parsedLat, parsedLong, parsedRange / 1000);
     }
 
     if (
@@ -209,8 +208,8 @@ export default function SearchScreen() {
                                 <TableRow key={idx}>
                                     <TableCell onClick={() => handleSelectId(d)} className="w-10 text-sm text-center hover:underline cursor-pointer">{d.Station_ID}</TableCell>
                                     <TableCell className="text-start w-24 text-sm">{d.Station_Name}</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">{d.File_Created}</TableCell>
-                                    <TableCell className="text-center w-28 text-sm">{d.Years_Covered}</TableCell>
+                                    <TableCell className="text-center w-28 text-sm">{d.File_Updated}</TableCell>
+                                    <TableCell className="text-center w-28 text-sm">{d['Tahun Mulai'] + "-" + d["Tahun Akhir"]}</TableCell>
                                     <TableCell className="text-center w-24 text-sm">{d.Elevation}</TableCell>
                                     <TableCell className="text-center w-28 text-sm">{d.latitude}</TableCell>
                                     <TableCell className="text-center w-28 text-sm">{d.longitude}</TableCell>

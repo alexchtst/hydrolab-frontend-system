@@ -14,12 +14,13 @@ import type { DataInterface } from "../types/data-store-type";
 import type { PairingStationData } from "../assets/data/data-types";
 import type { APIGetPaginationInterface, APIGetPairingDataInterface } from "../types/connection-type";
 import { execvFetchFunc, useFetchData } from "../lib/useConnection";
+import LoadingComponent from "../components/loading-component";
 
 export default function DataShowScreen() {
     const usenavigate = useNavigate();
     const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData, setTempDetailData, setSelectedLat, setSelectedLon } = React.useContext(DataContext);
     const page = Math.max(pagNum, 1)
-    const { data, err, isLoading } = useFetchData<APIGetPaginationInterface>(`/online-data/data/paginated?page=${page}&limit=${PAGINATION_LIMIT_OFFSET}`)
+    const { data, isLoading } = useFetchData<APIGetPaginationInterface>(`/online-data/data/paginated?page=${page}&limit=${PAGINATION_LIMIT_OFFSET}`)
 
     const handleSelectId = async (d: DataInterface) => {
         setTempMainData(d);
@@ -56,9 +57,7 @@ export default function DataShowScreen() {
         usenavigate(`/search`);
     }
 
-    if (isLoading) return <div>is loading</div>
-
-    console.log(err, data?.data, isLoading)
+    if (isLoading) return <LoadingComponent />
 
 
     return (
@@ -119,8 +118,8 @@ export default function DataShowScreen() {
                                         <TableRow key={idx}>
                                             <TableCell onClick={() => handleSelectId(d)} className="w-10 text-sm text-center hover:underline cursor-pointer">{d.Station_ID}</TableCell>
                                             <TableCell className="text-start w-24 text-sm">{d.Station_Name}</TableCell>
-                                            <TableCell className="text-center w-28 text-sm">{d.File_Created}</TableCell>
-                                            <TableCell className="text-center w-28 text-sm">{d.Years_Covered}</TableCell>
+                                            <TableCell className="text-center w-28 text-sm">{d.File_Updated}</TableCell>
+                                            <TableCell className="text-center w-28 text-sm">{d['Tahun Mulai'] + "-" + d["Tahun Akhir"]}</TableCell>
                                             <TableCell className="text-center w-24 text-sm">{d.Elevation}</TableCell>
                                             <TableCell className="text-center w-28 text-sm">{d.latitude}</TableCell>
                                             <TableCell className="text-center w-28 text-sm">{d.longitude}</TableCell>

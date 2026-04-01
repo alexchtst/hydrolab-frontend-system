@@ -15,15 +15,15 @@ export interface APIGetSearchnearestDataInterface {
     Station_ID: number;
     Station_Name: string;
     Elevation: number;
-    File_Created: string;
+    File_Updated: string;
     Data_Points: number;
     Years_Covered: string;
-    Records: number;
+    "Data Tersedia": number;
     "Tahun Mulai": number;
     "Tahun Akhir": number;
     Annual_Mean: number;
     Annual_Max: number;
-    Missing_Values: number;
+    "Data Hilang": number;
     LAT: number;
     LON: number;
     latitude: number;
