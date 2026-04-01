@@ -6,8 +6,8 @@ export interface MetaDataInterface {
   Data_Points: number;
   Years_Covered: string;
   Records: number;
-  "Tahun Mulai": number;
-  "Tahun Akhir": number;
+  "Tahun Mulai"?: number;
+  "Tahun Akhir"?: number;
   Annual_Mean: number;
   Annual_Max: number;
   Missing_Values: number;
