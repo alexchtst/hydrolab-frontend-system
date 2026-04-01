@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { useNavigate } from "react-router-dom";
 import {
     Table,
@@ -20,13 +19,13 @@ export default function DataShowScreen() {
     const usenavigate = useNavigate();
     const { pagNum, PAGINATION_LIMIT_OFFSET, setTempMainData, setTempDetailData, setSelectedLat, setSelectedLon } = React.useContext(DataContext);
     const page = Math.max(pagNum, 1)
-    const { data, err, isLoading } = useFetchData<APIGetPaginationInterface>(`/data/paginated?page=${page}&limit=${PAGINATION_LIMIT_OFFSET}`)
+    const { data, err, isLoading } = useFetchData<APIGetPaginationInterface>(`/online-data/data/paginated?page=${page}&limit=${PAGINATION_LIMIT_OFFSET}`)
 
     const handleSelectId = async (d: DataInterface) => {
         setTempMainData(d);
 
         // [TODO: TIDY UP THIS ALEX PLEASE]
-        const result = await execvFetchFunc<APIGetPairingDataInterface>(`/pairing/${d.Station_ID.toString()}`);
+        const result = await execvFetchFunc<APIGetPairingDataInterface>(`/online-data/pairing/${d.Station_ID.toString()}`);
 
         if (!result) {
             return;
