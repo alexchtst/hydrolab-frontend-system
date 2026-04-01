@@ -32,7 +32,7 @@ export default function SearchScreen() {
             setTempMainData(d);
             
             // [TODO: TIDY UP THIS ALEX PLEASE]
-            const result = await execvFetchFunc<APIGetPairingDataInterface>(`/online-data//pairing/${d.Station_ID.toString()}`);
+            const result = await execvFetchFunc<APIGetPairingDataInterface>(`/online-data/pairing/${d.Station_ID.toString()}`);
             
             if (!result) {
                 return;
@@ -67,7 +67,7 @@ export default function SearchScreen() {
             return;
         }
 
-        const result = await execvFetchFunc<MetaDataInterface[]>(`/online-data//search?lat=${parsedLat}&lon=${parsedLong}&radius=${parsedRange / 1000}`);
+        const result = await execvFetchFunc<MetaDataInterface[]>(`/online-data/search?lat=${parsedLat}&lon=${parsedLong}&radius=${parsedRange / 1000}`);
 
         let data: MetaDataInterface[] = [];
 
